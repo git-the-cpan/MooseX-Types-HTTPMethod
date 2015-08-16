@@ -1,8 +1,8 @@
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
-use Test::More tests => 22;
-use Test::NoWarnings 1.04 ':early';
+use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
 use MooseX::Types::HTTPMethod qw(HTTPMethod10 HTTPMethod11 HTTPMethod);
 
@@ -29,7 +29,12 @@ my @constraints = (
     [ HTTPMethod11,  'TRACE',   1 ],
     [ HTTPMethod11,  'CONNECT', 1 ],
     [ HTTPMethod11,  'PATCH',   0 ],
+
+    [ HTTPMethod,    'GET',     1 ],
+    [ HTTPMethod,    'HEAD',    1 ],
+    [ HTTPMethod,    'POST',    1 ],
     [ HTTPMethod,    'PATCH',   1 ],
+    [ HTTPMethod,    'COPY',    1 ],
     [ HTTPMethod,    'FOO',     0 ],
 );
 
@@ -50,3 +55,4 @@ foreach my $constraint (@constraints)
         if not $e_valid;
 }
 
+done_testing;
